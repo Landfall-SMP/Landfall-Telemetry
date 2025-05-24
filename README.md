@@ -22,8 +22,8 @@ A comprehensive monitoring solution using Prometheus, Thanos, Grafana, and Node 
 
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
-   cd Telemetry
+   git clone https://github.com/Landfall-SMP/Landfall-Telemetry.git
+   cd Landfall-Telemetry
    ```
 
 2. Create the data directories:
@@ -133,13 +133,6 @@ The stack uses host filesystem storage for better performance and scalability:
 - `./data/grafana/`: Grafana storage
   - Contains dashboards, users, and plugins
   - Initialized with UID 472 (grafana user)
-
-### Storage Management
-Monitor disk usage:
-```bash
-du -sh data/prometheus
-du -sh data/grafana
-```
 
 ### Backup Process
 ```bash
