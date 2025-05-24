@@ -1,0 +1,19 @@
+# ./grafana/provisioning/datasources/datasources.yml
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    editable: true
+    version: 1
+
+  - name: Thanos Query
+    type: prometheus
+    access: proxy
+    url: http://thanos-query:19090
+    editable: true
+    isDefault: true
+    version: 1
+    uid: femstsbpdfpj4f

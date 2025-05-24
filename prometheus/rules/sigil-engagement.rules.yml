@@ -1,0 +1,43 @@
+groups:
+- name: SigilEngagement
+  interval: 1m
+  rules:
+    - record: sigil_sessions_per_day
+      expr: rate(sigil_session_duration_seconds_count[1d])
+
+    - record: sigil_avg_session_length
+      expr: |
+        rate(sigil_session_duration_seconds_sum[1d])
+        /
+        rate(sigil_session_duration_seconds_count[1d])
+
+    - record: sigil_avg_concurrent_sessions
+      expr: avg_over_time(sigil_active_sessions[1d])
+
+    - record: sigil_engagement_score
+      expr: |
+        0.3 * (sigil_sessions_per_day / 200)
+        + 0.5 * (sigil_avg_session_length / 3600)
+        + 0.2 * (sigil_avg_concurrent_sessions / 100)
+
+    - record: sigil_engagement_wow_change
+      expr: |
+        (sigil_engagement_score - sigil_engagement_score offset 7d)
+        /
+        (sigil_engagement_score offset 7d) * 100
+
+    # --- dynamic normalization over past 7 days ---
+    - record: sigil_sessions_per_day_max_7d
+      expr: max_over_time(sigil_sessions_per_day[7d])
+
+    - record: sigil_avg_session_length_max_7d
+      expr: max_over_time(sigil_avg_session_length[7d])
+
+    - record: sigil_avg_concurrent_sessions_max_7d
+      expr: max_over_time(sigil_avg_concurrent_sessions[7d])
+
+    - record: sigil_dynamic_engagement_score
+      expr: |
+        0.3 * (sigil_sessions_per_day / sigil_sessions_per_day_max_7d)
+        + 0.5 * (sigil_avg_session_length / sigil_avg_session_length_max_7d)
+        + 0.2 * (sigil_avg_concurrent_sessions / sigil_avg_concurrent_sessions_max_7d)
