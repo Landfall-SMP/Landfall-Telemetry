@@ -31,10 +31,11 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./data/prometheus:/prometheus/data
+      - ./prometheus/rules:/etc/prometheus/rules:ro
     ports:
       - "9090:9090"
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.19.0.1" # see fixing-sigil.md
     networks:
       - monitoring
 
@@ -124,4 +125,7 @@ services:
 
 networks:
   monitoring:
+    name: monitoring
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_host_gw: "true"
